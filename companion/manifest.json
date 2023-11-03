@@ -1,12 +1,12 @@
 {
-	"id": "your-module-name",
-	"name": "your-module-name",
-	"shortname": "module-shortname",
-	"description": "A short one line description of your module",
+	"id": "companion-module-voicemod",
+	"name": "companion-module-voicemod",
+	"shortname": "Voicemod",
+	"description": "Voicemod control at your fingertips",
 	"version": "0.0.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/bitfocus/companion-module-your-module-name.git",
-	"bugs": "https://github.com/bitfocus/companion-module-your-module-name/issues",
+	"repository": "git+https://github.com/bitfocus/companion-module-voicemod.git",
+	"bugs": "https://github.com/bitfocus/companion-module-voicemod/issues",
 	"maintainers": [
 		{
 			"name": "Your name",
@@ -20,7 +20,7 @@
 		"entrypoint": "../main.js"
 	},
 	"legacyIds": [],
-	"manufacturer": "Your company",
-	"products": ["Your product"],
-	"keywords": []
+	"manufacturer": "Voicemod",
+	"products": ["Voicemod"],
+	"keywords": ["Audio"]
 }

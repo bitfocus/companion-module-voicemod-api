@@ -1,5 +1,5 @@
 {
-	"name": "your-module-name",
+	"name": "companion-module-voicemod",
 	"version": "0.1.0",
 	"main": "main.js",
 	"scripts": {
@@ -8,10 +8,12 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bitfocus/companion-module-your-module-name.git"
+		"url": "git+https://github.com/RavenX8/companion-module-voicemod.git"
 	},
 	"dependencies": {
-		"@companion-module/base": "~1.5.1"
+		"@companion-module/base": "~1.5.1",
+		"voicemod": "^0.1.4",
+		"ws": "^8.14.2"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^1.4.1"
