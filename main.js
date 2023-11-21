@@ -18,7 +18,7 @@ class ModuleInstance extends InstanceBase {
 		this.log('debug', 'init called')
 
 		this.updateStatus(InstanceStatus.Connecting)
-		this.vm = new VoiceMod()
+		this.vm = new VoiceMod(this.config.host, this.config.apiKey === '' ? 'anyClient' : this.config.apiKey)
 		try {
 			this.vm.init().then(
 				async () => {
@@ -49,15 +49,31 @@ class ModuleInstance extends InstanceBase {
 
 	// Return config fields for web config
 	getConfigFields() {
-		return []
+		return [
+			{
+				id: 'host',
+				type: 'textinput',
+				label: 'Host address',
+				tooltip: 'Enter the IP/Hostname for the voicemod instance',
+				default: '127.0.0.1',
+			},
+			{
+				id: 'apiKey',
+				type: 'textinput',
+				label: 'API Key',
+				tooltip: 'Enter your developer API Key for voicemod (not required for now)',
+				default: '',
+			},
+		]
 	}
 
 	updateActionsFeedbacksVariables() {
-		// this.organizeChoices()
-
 		this.updateActions() // export actions
 		// this.updateFeedbacks() // export feedbacks
-		// this.updateVariableDefinitions() // export variable definitions
+		this.updateVariableDefinitions() // export variable definitions
+
+		this.subscribeActions()
+		// this.subscribeFeedbacks()
 		// this.checkFeedbacks()
 	}
 

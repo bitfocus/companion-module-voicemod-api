@@ -7,13 +7,13 @@ module.exports = function (self) {
 					id: 'voiceId',
 					type: 'dropdown',
 					label: 'Voice',
-					default: 0,
+					default: self.vm.voices[0].id,
 					choices: self.vm.voices.map((item) => ({ id: item.id, label: item.name })),
 				},
 			],
 			callback: async (event) => {
 				const voiceId = event.options.voiceId
-				self.vm.voices[voiceId].load()
+				self.vm.internal.setVoice(voiceId)
 			},
 		},
 		set_beep_sound: {
@@ -41,24 +41,17 @@ module.exports = function (self) {
 			name: 'Play Meme',
 			options: [
 				{
-					id: 'soundboardId',
-					type: 'dropdown',
-					label: 'Soundboard',
-					default: 0,
-					choices: self.vm.soundboards.map((item) => ({ id: item.id, label: item.name })),
-				},
-				{
 					id: 'memeId',
 					type: 'dropdown',
 					label: 'Meme',
 					default: 0,
+					choices: self.vm.soundboards.flat().map((item) => ({ id: item.id, label: item.name })),
 				},
 			],
 			callback: async (event) => {
-				console.log('in callback!')
-				const soundboardId = event.options.soundboardId
+				// console.log('in callback!')
 				const memeId = event.options.memeId
-				self.vm.soundboards[soundboardId][memeId].play()
+				self.vm.internal.playMeme(memeId)
 			},
 		},
 		stop_all_sounds: {
