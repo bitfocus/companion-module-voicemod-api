@@ -1,16 +1,18 @@
 {
-	"id": "companion-module-voicemod",
-	"name": "companion-module-voicemod",
+	"id": "companion-module-voicemod-api",
+	"name": "companion-module-voicemod-api",
 	"shortname": "Voicemod",
 	"description": "Voicemod control at your fingertips",
 	"version": "0.0.0",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-voicemod.git",
 	"bugs": "https://github.com/bitfocus/companion-module-voicemod/issues",
+	"repository": "git+https://github.com/bitfocus/companion-module-voicemod-api.git",
 	"maintainers": [
 		{
 			"name": "Your name",
 			"email": "Your email"
+			"name": "RavenX8",
 		}
 	],
 	"runtime": {
