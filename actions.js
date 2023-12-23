@@ -35,6 +35,7 @@ module.exports = function (self) {
 			options: [],
 			callback: async (event) => {
 				self.vm.internal.toggleVoiceChanger()
+				self.checkFeedbacks('VoiceChangerState')
 			},
 		},
 		play_meme: {
