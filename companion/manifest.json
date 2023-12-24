@@ -5,14 +5,12 @@
 	"description": "Voicemod control at your fingertips",
 	"version": "0.0.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/bitfocus/companion-module-voicemod.git",
-	"bugs": "https://github.com/bitfocus/companion-module-voicemod/issues",
 	"repository": "git+https://github.com/bitfocus/companion-module-voicemod-api.git",
+	"bugs": "https://github.com/bitfocus/companion-module-voicemod-api/issues",
 	"maintainers": [
 		{
-			"name": "Your name",
-			"email": "Your email"
 			"name": "RavenX8",
+			"email": "redflames1003@gmail.com"
 		}
 	],
 	"runtime": {

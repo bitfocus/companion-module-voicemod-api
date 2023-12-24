@@ -12,8 +12,7 @@
 	},
 	"dependencies": {
 		"@companion-module/base": "~1.5.1",
-		"voicemod": "^0.1.5",
-		"ws": "^8.14.2"
+		"voicemod": "^0.1.6"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^1.4.1"

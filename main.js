@@ -11,11 +11,11 @@ class ModuleInstance extends InstanceBase {
 
 		this.config = {}
 		this.memes = []
-		this.backgroundEffectsEnabled = false;
-		this.voiceChangerEnabled = false;
-		this.hearMyVoiceEnabled = false;
-		this.muteEnabled = false;
-		this.muteMemesEnabled = false;
+		this.backgroundEffectsEnabled = false
+		this.voiceChangerEnabled = false
+		this.hearMyVoiceEnabled = false
+		this.muteEnabled = false
+		this.muteMemesEnabled = false
 	}
 
 	async init(config) {
@@ -27,46 +27,46 @@ class ModuleInstance extends InstanceBase {
 		try {
 			this.vm.init().then(
 				async () => {
-					this.vm.internal.on('backgroundEffectsEnabledEvent', ( background ) => {
-						this.backgroundEffectsEnabled = true;
-						this.checkFeedbacks('BackgroundEffectState');
-					});
-					this.vm.internal.on('backgroundEffectsDisabledEvent', ( background ) => {
-						this.backgroundEffectsEnabled = false;
-						this.checkFeedbacks('BackgroundEffectState');
-					});
-					this.vm.internal.on('voiceChangerEnabledEvent', ( data ) => {
-						this.voiceChangerEnabled = true;
-						this.checkFeedbacks('VoiceChangerState');
-					});
-					this.vm.internal.on('voiceChangerDisabledEvent', ( data ) => {
-						this.voiceChangerEnabled = false;
-						this.checkFeedbacks('VoiceChangerState');
-					});
-					this.vm.internal.on('hearMySelfEnabledEvent', ( data ) => {
-						this.hearMyVoiceEnabled = true;
-						this.checkFeedbacks('HearMyVoiceState');
-					});
-					this.vm.internal.on('hearMySelfDisabledEvent', ( data ) => {
-						this.hearMyVoiceEnabled = false;
-						this.checkFeedbacks('HearMyVoiceState');
-					});
-					this.vm.internal.on('muteMicrophoneEnabledEvent', ( data ) => {
-						this.muteEnabled = true;
-						this.checkFeedbacks('MicMutedState');
-					});
-					this.vm.internal.on('muteMicrophoneDisabledEvent', ( data ) => {
-						this.muteEnabled = false;
-						this.checkFeedbacks('MicMutedState');
-					});
-					this.vm.internal.on('muteMemeForMeEnabledEvent', ( data ) => {
-						this.muteMemesEnabled = true;
-						this.checkFeedbacks('MemesMutedForMeState');
-					});
-					this.vm.internal.on('muteMemeForMeDisabledEvent', ( data ) => {
-						this.muteMemesEnabled = false;
-						this.checkFeedbacks('MemesMutedForMeState');
-					});
+					this.vm.internal.on('backgroundEffectsEnabledEvent', (background) => {
+						this.backgroundEffectsEnabled = true
+						this.checkFeedbacks('BackgroundEffectState')
+					})
+					this.vm.internal.on('backgroundEffectsDisabledEvent', (background) => {
+						this.backgroundEffectsEnabled = false
+						this.checkFeedbacks('BackgroundEffectState')
+					})
+					this.vm.internal.on('voiceChangerEnabledEvent', (data) => {
+						this.voiceChangerEnabled = true
+						this.checkFeedbacks('VoiceChangerState')
+					})
+					this.vm.internal.on('voiceChangerDisabledEvent', (data) => {
+						this.voiceChangerEnabled = false
+						this.checkFeedbacks('VoiceChangerState')
+					})
+					this.vm.internal.on('hearMySelfEnabledEvent', (data) => {
+						this.hearMyVoiceEnabled = true
+						this.checkFeedbacks('HearMyVoiceState')
+					})
+					this.vm.internal.on('hearMySelfDisabledEvent', (data) => {
+						this.hearMyVoiceEnabled = false
+						this.checkFeedbacks('HearMyVoiceState')
+					})
+					this.vm.internal.on('muteMicrophoneEnabledEvent', (data) => {
+						this.muteEnabled = true
+						this.checkFeedbacks('MicMutedState')
+					})
+					this.vm.internal.on('muteMicrophoneDisabledEvent', (data) => {
+						this.muteEnabled = false
+						this.checkFeedbacks('MicMutedState')
+					})
+					this.vm.internal.on('muteMemeForMeEnabledEvent', (data) => {
+						this.muteMemesEnabled = true
+						this.checkFeedbacks('MemesMutedForMeState')
+					})
+					this.vm.internal.on('muteMemeForMeDisabledEvent', (data) => {
+						this.muteMemesEnabled = false
+						this.checkFeedbacks('MemesMutedForMeState')
+					})
 					this.vm.internal.getVoiceChangerStatus()
 					this.vm.internal.getBackgroundEffectStatus()
 					this.vm.internal.getMuteMicStatus()
