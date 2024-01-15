@@ -9,6 +9,9 @@ class ModuleInstance extends InstanceBase {
 	constructor(internal) {
 		super(internal)
 
+		this.loaded = false
+		this.failure = 0
+
 		this.config = {}
 		this.memes = []
 		this.backgroundEffectsEnabled = false
@@ -18,74 +21,84 @@ class ModuleInstance extends InstanceBase {
 		this.muteMemesEnabled = false
 	}
 
+	sleep(ms) {
+		return new Promise((resolve) => setTimeout(resolve, ms))
+	}
+
 	async init(config) {
 		this.config = config
 		this.log('debug', 'init called')
 
-		this.updateStatus(InstanceStatus.Connecting)
-		this.vm = new VoiceMod(this.config.host, this.config.apiKey === '' ? 'anyClient' : this.config.apiKey)
-		try {
-			this.vm.init().then(
-				async () => {
-					this.vm.internal.on('backgroundEffectsEnabledEvent', (background) => {
-						this.backgroundEffectsEnabled = true
-						this.checkFeedbacks('BackgroundEffectState')
-					})
-					this.vm.internal.on('backgroundEffectsDisabledEvent', (background) => {
-						this.backgroundEffectsEnabled = false
-						this.checkFeedbacks('BackgroundEffectState')
-					})
-					this.vm.internal.on('voiceChangerEnabledEvent', (data) => {
-						this.voiceChangerEnabled = true
-						this.checkFeedbacks('VoiceChangerState')
-					})
-					this.vm.internal.on('voiceChangerDisabledEvent', (data) => {
-						this.voiceChangerEnabled = false
-						this.checkFeedbacks('VoiceChangerState')
-					})
-					this.vm.internal.on('hearMySelfEnabledEvent', (data) => {
-						this.hearMyVoiceEnabled = true
-						this.checkFeedbacks('HearMyVoiceState')
-					})
-					this.vm.internal.on('hearMySelfDisabledEvent', (data) => {
-						this.hearMyVoiceEnabled = false
-						this.checkFeedbacks('HearMyVoiceState')
-					})
-					this.vm.internal.on('muteMicrophoneEnabledEvent', (data) => {
-						this.muteEnabled = true
-						this.checkFeedbacks('MicMutedState')
-					})
-					this.vm.internal.on('muteMicrophoneDisabledEvent', (data) => {
-						this.muteEnabled = false
-						this.checkFeedbacks('MicMutedState')
-					})
-					this.vm.internal.on('muteMemeForMeEnabledEvent', (data) => {
-						this.muteMemesEnabled = true
-						this.checkFeedbacks('MemesMutedForMeState')
-					})
-					this.vm.internal.on('muteMemeForMeDisabledEvent', (data) => {
-						this.muteMemesEnabled = false
-						this.checkFeedbacks('MemesMutedForMeState')
-					})
-					this.vm.internal.getVoiceChangerStatus()
-					this.vm.internal.getBackgroundEffectStatus()
-					this.vm.internal.getMuteMicStatus()
-					this.vm.internal.getMuteMemeForMeStatus()
+		do {
+			this.updateStatus(InstanceStatus.Connecting)
+			this.vm = new VoiceMod(this.config.host, this.config.apiKey === '' ? 'anyClient' : this.config.apiKey)
+			try {
+				this.vm.init().then(
+					async () => {
+						this.vm.internal.on('backgroundEffectsEnabledEvent', (background) => {
+							this.backgroundEffectsEnabled = true
+							this.checkFeedbacks('BackgroundEffectState')
+						})
+						this.vm.internal.on('backgroundEffectsDisabledEvent', (background) => {
+							this.backgroundEffectsEnabled = false
+							this.checkFeedbacks('BackgroundEffectState')
+						})
+						this.vm.internal.on('voiceChangerEnabledEvent', (data) => {
+							this.voiceChangerEnabled = true
+							this.checkFeedbacks('VoiceChangerState')
+						})
+						this.vm.internal.on('voiceChangerDisabledEvent', (data) => {
+							this.voiceChangerEnabled = false
+							this.checkFeedbacks('VoiceChangerState')
+						})
+						this.vm.internal.on('hearMySelfEnabledEvent', (data) => {
+							this.hearMyVoiceEnabled = true
+							this.checkFeedbacks('HearMyVoiceState')
+						})
+						this.vm.internal.on('hearMySelfDisabledEvent', (data) => {
+							this.hearMyVoiceEnabled = false
+							this.checkFeedbacks('HearMyVoiceState')
+						})
+						this.vm.internal.on('muteMicrophoneEnabledEvent', (data) => {
+							this.muteEnabled = true
+							this.checkFeedbacks('MicMutedState')
+						})
+						this.vm.internal.on('muteMicrophoneDisabledEvent', (data) => {
+							this.muteEnabled = false
+							this.checkFeedbacks('MicMutedState')
+						})
+						this.vm.internal.on('muteMemeForMeEnabledEvent', (data) => {
+							this.muteMemesEnabled = true
+							this.checkFeedbacks('MemesMutedForMeState')
+						})
+						this.vm.internal.on('muteMemeForMeDisabledEvent', (data) => {
+							this.muteMemesEnabled = false
+							this.checkFeedbacks('MemesMutedForMeState')
+						})
+						this.vm.internal.getVoiceChangerStatus()
+						this.vm.internal.getBackgroundEffectStatus()
+						this.vm.internal.getMuteMicStatus()
+						this.vm.internal.getMuteMemeForMeStatus()
 
-					this.updateStatus(InstanceStatus.Ok)
-					this.updateActionsFeedbacksVariables()
+						this.updateStatus(InstanceStatus.Ok)
+						this.updateActionsFeedbacksVariables()
 
-					this.log('debug', 'connected to VM and ready')
-				},
-				(reason) => {
-					this.log('debug', reason)
-					this.updateStatus(InstanceStatus.ConnectionFailure)
-				}
-			)
-		} catch (e) {
-			this.log('debug', e)
-			this.updateStatus(InstanceStatus.UnknownError)
-		}
+						this.loaded = true
+						this.log('debug', 'connected to VM and ready')
+					},
+					(reason) => {
+						this.log('debug', reason)
+						this.updateStatus(InstanceStatus.ConnectionFailure)
+						++this.failure
+					}
+				)
+			} catch (e) {
+				this.log('debug', e)
+				this.updateStatus(InstanceStatus.UnknownError)
+				++this.failure
+			}
+			if (this.loaded === false) await this.sleep(500)
+		} while (this.loaded === false && this.failure < 5)
 	}
 	// When module gets deleted
 	async destroy() {
@@ -137,6 +150,12 @@ class ModuleInstance extends InstanceBase {
 
 	updateVariableDefinitions() {
 		UpdateVariableDefinitions(this)
+
+		this.setVariableValues({
+			microphoneMuted: this.muteEnabled,
+			voiceChangerStatus: !this.voiceChangerEnabled,
+			voiceSelected: undefined,
+		})
 	}
 }
 

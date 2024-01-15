@@ -7,7 +7,7 @@ module.exports = function (self) {
 					id: 'voiceId',
 					type: 'dropdown',
 					label: 'Voice',
-					default: self.vm.voices[0].id,
+					default: '',
 					choices: self.vm.voices.map((item) => ({ id: item.id, label: item.name })),
 				},
 			],
