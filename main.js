@@ -19,6 +19,7 @@ class ModuleInstance extends InstanceBase {
 		this.hearMyVoiceEnabled = false
 		this.muteEnabled = false
 		this.muteMemesEnabled = false
+		this.currentVoiceName = ''
 	}
 
 	sleep(ms) {
@@ -31,9 +32,9 @@ class ModuleInstance extends InstanceBase {
 
 		do {
 			this.updateStatus(InstanceStatus.Connecting)
-			this.vm = new VoiceMod(this.config.host, this.config.apiKey === '' ? 'anyClient' : this.config.apiKey)
+			this.vm = new VoiceMod(this.config.host, 'controlapi-pty528000')
 			try {
-				this.vm.init().then(
+				await this.vm.init().then(
 					async () => {
 						this.vm.internal.on('backgroundEffectsEnabledEvent', (background) => {
 							this.backgroundEffectsEnabled = true
@@ -46,10 +47,12 @@ class ModuleInstance extends InstanceBase {
 						this.vm.internal.on('voiceChangerEnabledEvent', (data) => {
 							this.voiceChangerEnabled = true
 							this.checkFeedbacks('VoiceChangerState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('voiceChangerDisabledEvent', (data) => {
 							this.voiceChangerEnabled = false
 							this.checkFeedbacks('VoiceChangerState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('hearMySelfEnabledEvent', (data) => {
 							this.hearMyVoiceEnabled = true
@@ -62,10 +65,12 @@ class ModuleInstance extends InstanceBase {
 						this.vm.internal.on('muteMicrophoneEnabledEvent', (data) => {
 							this.muteEnabled = true
 							this.checkFeedbacks('MicMutedState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('muteMicrophoneDisabledEvent', (data) => {
 							this.muteEnabled = false
 							this.checkFeedbacks('MicMutedState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('muteMemeForMeEnabledEvent', (data) => {
 							this.muteMemesEnabled = true
@@ -75,15 +80,36 @@ class ModuleInstance extends InstanceBase {
 							this.muteMemesEnabled = false
 							this.checkFeedbacks('MemesMutedForMeState')
 						})
-						this.vm.internal.getVoiceChangerStatus()
-						this.vm.internal.getBackgroundEffectStatus()
-						this.vm.internal.getMuteMicStatus()
-						this.vm.internal.getMuteMemeForMeStatus()
+						this.vm.internal.on('getAllSoundboard', (data) => {
+							this.updateActions()
+						})
+						this.vm.internal.on('voiceLoadedEvent', (data) => {
+							this.currentVoiceName = data.voiceId
+							this.updateVariableDefinitions()
+						})
+						this.vm.internal.on('getCurrentVoice', (data) => {
+							this.currentVoiceName = data.voiceId
+							this.updateVariableDefinitions()
+						})
+						this.vm.internal.on('toggleVoiceChanger', (data) => {
+							this.voiceChangerEnabled = data.value
+							this.checkFeedbacks('VoiceChangerState')
+							this.updateVariableDefinitions()
+						})
+						this.vm.internal.on('toggleMuteMic', (data) => {
+							this.muteEnabled = data.value
+							this.checkFeedbacks('MicMutedState')
+							this.updateVariableDefinitions()
+						})
 
+						await this.vm.internal.getCurrentVoice()
+						this.vm.internal.getVoiceChangerStatus()
+						this.vm.internal.getMuteMicStatus()
+
+						this.loaded = true
 						this.updateStatus(InstanceStatus.Ok)
 						this.updateActionsFeedbacksVariables()
 
-						this.loaded = true
 						this.log('debug', 'connected to VM and ready')
 					},
 					(reason) => {
@@ -120,13 +146,13 @@ class ModuleInstance extends InstanceBase {
 				tooltip: 'Enter the IP/Hostname for the voicemod instance',
 				default: '127.0.0.1',
 			},
-			{
-				id: 'apiKey',
-				type: 'textinput',
-				label: 'API Key',
-				tooltip: 'Enter your developer API Key for voicemod (not required for now)',
-				default: '',
-			},
+			// {
+			// 	id: 'apiKey',
+			// 	type: 'textinput',
+			// 	label: 'API Key',
+			// 	tooltip: 'Enter your developer API Key for voicemod (not required for now)',
+			// 	default: '',
+			// },
 		]
 	}
 
@@ -153,8 +179,8 @@ class ModuleInstance extends InstanceBase {
 
 		this.setVariableValues({
 			microphoneMuted: this.muteEnabled,
-			voiceChangerStatus: !this.voiceChangerEnabled,
-			voiceSelected: undefined,
+			voiceChangerStatus: this.voiceChangerEnabled,
+			voiceSelected: this.currentVoiceName,
 		})
 	}
 }
