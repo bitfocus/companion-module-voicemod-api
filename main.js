@@ -3,6 +3,7 @@ const UpgradeScripts = require('./upgrades')
 const UpdateActions = require('./actions')
 const UpdateFeedbacks = require('./feedbacks')
 const UpdateVariableDefinitions = require('./variables')
+const UpdatePresets = require('./presets')
 const { VoiceMod } = require('voicemod')
 
 class ModuleInstance extends InstanceBase {
@@ -108,6 +109,7 @@ class ModuleInstance extends InstanceBase {
 
 						this.loaded = true
 						this.updateStatus(InstanceStatus.Ok)
+						this.updatePresets()
 						this.updateActionsFeedbacksVariables()
 
 						this.log('debug', 'connected to VM and ready')
@@ -123,7 +125,6 @@ class ModuleInstance extends InstanceBase {
 				this.updateStatus(InstanceStatus.UnknownError)
 				++this.failure
 			}
-			if (this.loaded === false) await this.sleep(500)
 		} while (this.loaded === false && this.failure < 5)
 	}
 	// When module gets deleted
@@ -146,13 +147,6 @@ class ModuleInstance extends InstanceBase {
 				tooltip: 'Enter the IP/Hostname for the voicemod instance',
 				default: '127.0.0.1',
 			},
-			// {
-			// 	id: 'apiKey',
-			// 	type: 'textinput',
-			// 	label: 'API Key',
-			// 	tooltip: 'Enter your developer API Key for voicemod (not required for now)',
-			// 	default: '',
-			// },
 		]
 	}
 
@@ -182,6 +176,10 @@ class ModuleInstance extends InstanceBase {
 			voiceChangerStatus: this.voiceChangerEnabled,
 			voiceSelected: this.currentVoiceName,
 		})
+	}
+
+	updatePresets() {
+		UpdatePresets(this)
 	}
 }
 
