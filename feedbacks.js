@@ -3,9 +3,9 @@ const { combineRgb } = require('@companion-module/base')
 module.exports = async function (self) {
 	self.setFeedbackDefinitions({
 		VoiceChangerState: {
-			name: 'Voice Changer State',
+			name: 'Voice Changer Enabled',
 			type: 'boolean',
-			label: 'Voice Changer State',
+			label: 'Voice Changer Enabled',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 				color: combineRgb(0, 0, 0),
@@ -16,9 +16,9 @@ module.exports = async function (self) {
 			},
 		},
 		BackgroundEffectState: {
-			name: 'Background Effect State',
+			name: 'Background Effect Enabled',
 			type: 'boolean',
-			label: 'Background Effect Status',
+			label: 'Background Effect Enabled',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 				color: combineRgb(0, 0, 0),
@@ -29,9 +29,9 @@ module.exports = async function (self) {
 			},
 		},
 		HearMyVoiceState: {
-			name: 'Hear My Voice State',
+			name: 'Hear My Voice Enabled',
 			type: 'boolean',
-			label: 'Hear My Voice State',
+			label: 'Hear My Voice Enabled',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 				color: combineRgb(0, 0, 0),
@@ -42,9 +42,9 @@ module.exports = async function (self) {
 			},
 		},
 		MicMutedState: {
-			name: 'Microphone Mute State',
+			name: 'Microphone Mute Enabled',
 			type: 'boolean',
-			label: 'Microphone Mute State',
+			label: 'Microphone Mute Enabled',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 				color: combineRgb(0, 0, 0),
@@ -55,9 +55,9 @@ module.exports = async function (self) {
 			},
 		},
 		MemesMutedForMeState: {
-			name: 'Soundboard - Mute For Me State',
+			name: 'Soundboard - Mute For Me Enabled',
 			type: 'boolean',
-			label: 'Soundboard Mute For Me State',
+			label: 'Soundboard Mute For Me Enabled',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 				color: combineRgb(0, 0, 0),

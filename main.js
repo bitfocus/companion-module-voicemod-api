@@ -40,10 +40,12 @@ class ModuleInstance extends InstanceBase {
 						this.vm.internal.on('backgroundEffectsEnabledEvent', (background) => {
 							this.backgroundEffectsEnabled = true
 							this.checkFeedbacks('BackgroundEffectState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('backgroundEffectsDisabledEvent', (background) => {
 							this.backgroundEffectsEnabled = false
 							this.checkFeedbacks('BackgroundEffectState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('voiceChangerEnabledEvent', (data) => {
 							this.voiceChangerEnabled = true
@@ -58,10 +60,12 @@ class ModuleInstance extends InstanceBase {
 						this.vm.internal.on('hearMySelfEnabledEvent', (data) => {
 							this.hearMyVoiceEnabled = true
 							this.checkFeedbacks('HearMyVoiceState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('hearMySelfDisabledEvent', (data) => {
 							this.hearMyVoiceEnabled = false
 							this.checkFeedbacks('HearMyVoiceState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('muteMicrophoneEnabledEvent', (data) => {
 							this.muteEnabled = true
@@ -76,10 +80,12 @@ class ModuleInstance extends InstanceBase {
 						this.vm.internal.on('muteMemeForMeEnabledEvent', (data) => {
 							this.muteMemesEnabled = true
 							this.checkFeedbacks('MemesMutedForMeState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('muteMemeForMeDisabledEvent', (data) => {
 							this.muteMemesEnabled = false
 							this.checkFeedbacks('MemesMutedForMeState')
+							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('getAllSoundboard', (data) => {
 							this.updateActions()
@@ -107,6 +113,7 @@ class ModuleInstance extends InstanceBase {
 						this.vm.internal.getVoiceChangerStatus()
 						this.vm.internal.getMuteMicStatus()
 
+						this.failure = 0
 						this.loaded = true
 						this.updateStatus(InstanceStatus.Ok)
 						this.updatePresets()
@@ -173,6 +180,9 @@ class ModuleInstance extends InstanceBase {
 
 		this.setVariableValues({
 			microphoneMuted: this.muteEnabled,
+			hearMyVoice: this.hearMyVoiceEnabled,
+			hearBackgroundMusic: this.backgroundEffectsEnabled,
+			hearMemesForMe: this.muteMemesEnabled,
 			voiceChangerStatus: this.voiceChangerEnabled,
 			voiceSelected: this.currentVoiceName,
 		})
