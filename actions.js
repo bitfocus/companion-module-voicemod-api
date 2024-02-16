@@ -62,5 +62,33 @@ module.exports = function (self) {
 				self.vm.stopAllSounds()
 			},
 		},
+		hear_self: {
+			name: 'Toggle Hear Self',
+			options: [],
+			callback: async (event) => {
+				self.vm.internal.toggleHearMyVoice()
+			},
+		},
+		hear_background: {
+			name: 'Toggle Hear Background',
+			options: [],
+			callback: async (event) => {
+				self.vm.internal.toggleBackground()
+			},
+		},
+		mute_mic: {
+			name: 'Toggle Mute Mic',
+			options: [],
+			callback: async (event) => {
+				self.vm.internal.toggleMuteMic()
+			},
+		},
+		mute_memes_for_me: {
+			name: 'Toggle Mute Soundboard for me',
+			options: [],
+			callback: async (event) => {
+				self.vm.internal.toggleMuteMemeForMe()
+			},
+		},
 	})
 }
