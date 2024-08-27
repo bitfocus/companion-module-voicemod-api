@@ -1,6 +1,6 @@
 {
-	"id": "companion-module-voicemod-api",
-	"name": "companion-module-voicemod-api",
+	"id": "voicemod-api",
+	"name": "voicemod-api",
 	"shortname": "Voicemod",
 	"description": "Voicemod control at your fingertips",
 	"version": "0.0.0",
@@ -19,7 +19,7 @@
 		"apiVersion": "0.0.0",
 		"entrypoint": "../main.js"
 	},
-	"legacyIds": [],
+	"legacyIds": ["companion-module-voicemod-api"],
 	"manufacturer": "Voicemod",
 	"products": ["Voicemod"],
 	"keywords": ["Audio"]
