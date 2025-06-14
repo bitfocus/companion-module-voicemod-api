@@ -33,7 +33,7 @@ class ModuleInstance extends InstanceBase {
 
 		do {
 			this.updateStatus(InstanceStatus.Connecting)
-			this.vm = new VoiceMod(this.config.host, 'controlapi-pty528000')
+			this.vm = new VoiceMod(this.config.host, this.config.apiKey === '' ? 'anyClient' : this.config.apiKey)
 			try {
 				await this.vm.init().then(
 					async () => {
@@ -153,6 +153,13 @@ class ModuleInstance extends InstanceBase {
 				label: 'Host address',
 				tooltip: 'Enter the IP/Hostname for the voicemod instance',
 				default: '127.0.0.1',
+			},
+			{
+				id: 'apiKey',
+				type: 'textinput',
+				label: 'API Key',
+				tooltip: 'Enter your API Key for voicemod (https://control-api.voicemod.net)',
+				default: '',
 			},
 		]
 	}
