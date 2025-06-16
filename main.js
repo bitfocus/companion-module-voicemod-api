@@ -15,16 +15,28 @@ class ModuleInstance extends InstanceBase {
 
 		this.config = {}
 		this.memes = []
+		this.voices = []
 		this.backgroundEffectsEnabled = false
 		this.voiceChangerEnabled = false
 		this.hearMyVoiceEnabled = false
 		this.muteEnabled = false
 		this.muteMemesEnabled = false
 		this.currentVoiceName = ''
+		this.currentVoiceId = ''
 	}
 
 	sleep(ms) {
 		return new Promise((resolve) => setTimeout(resolve, ms))
+	}
+
+	/**
+	 * @param {Array<Object>} arr
+	 * @param {string} id
+	 * @returns {string|null}
+	 */
+	getFriendlyName(arr, id) {
+		const obj = arr.find(o => o.id === id)
+		return obj ? obj.friendlyName : null
 	}
 
 	async init(config) {
@@ -90,13 +102,18 @@ class ModuleInstance extends InstanceBase {
 						this.vm.internal.on('getAllSoundboard', (data) => {
 							this.updateActions()
 						})
-						this.vm.internal.on('voiceLoadedEvent', (data) => {
-							this.currentVoiceName = data.voiceId
+						this.vm.internal.on('voiceChangedEvent', (data) => {
+							this.currentVoiceId = data.voiceID
+							this.currentVoiceName = this.getFriendlyName(this.voices, this.currentVoiceId)
 							this.updateVariableDefinitions()
 						})
 						this.vm.internal.on('getCurrentVoice', (data) => {
-							this.currentVoiceName = data.voiceId
+							this.currentVoiceId = data.voiceID
+							this.currentVoiceName = this.getFriendlyName(this.voices, this.currentVoiceId)
 							this.updateVariableDefinitions()
+						})
+						this.vm.internal.on('getVoices', (data) => {
+							this.voices = data.voices
 						})
 						this.vm.internal.on('toggleVoiceChanger', (data) => {
 							this.voiceChangerEnabled = data.value
@@ -109,6 +126,7 @@ class ModuleInstance extends InstanceBase {
 							this.updateVariableDefinitions()
 						})
 
+						await this.vm.internal.getVoices()
 						await this.vm.internal.getCurrentVoice()
 						this.vm.internal.getVoiceChangerStatus()
 						this.vm.internal.getMuteMicStatus()
