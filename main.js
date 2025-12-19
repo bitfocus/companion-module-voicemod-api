@@ -43,6 +43,11 @@ class ModuleInstance extends InstanceBase {
 		this.config = config
 		this.log('debug', 'init called')
 
+		if (this.config.apiKey === '') {
+			this.updateStatus(InstanceStatus.BadConfig)
+			return
+		}
+
 		do {
 			this.updateStatus(InstanceStatus.Connecting)
 			this.vm = new VoiceMod(this.config.host, this.config.apiKey === '' ? 'anyClient' : this.config.apiKey)
@@ -147,7 +152,14 @@ class ModuleInstance extends InstanceBase {
 				)
 			} catch (e) {
 				this.log('debug', e)
-				this.updateStatus(InstanceStatus.UnknownError)
+
+				if (e.message && e.message.includes('Cannot authenticate client')) {
+					this.updateStatus(InstanceStatus.AuthenticationFailure)
+				} else if (e.message && e.message.includes('Cannot connect to VoiceMod, are you sure it is running?')) {
+					this.updateStatus(InstanceStatus.ConnectionFailure)
+				} else {
+					this.updateStatus(InstanceStatus.UnknownError)
+				}
 				++this.failure
 			}
 		} while (this.loaded === false && this.failure < 5)
