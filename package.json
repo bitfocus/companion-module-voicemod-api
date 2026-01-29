@@ -15,7 +15,7 @@
 		"voicemod": "git+https://github.com/RavenX8/voicemod-api.git#a7a61f3d4b2c308d953f7c52c1c12bc98e5cc910"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^1.5.1"
+		"@companion-module/tools": "^1.5.2"
 	},
 	"prettier": "@companion-module/tools/.prettierrc.json"
 }
